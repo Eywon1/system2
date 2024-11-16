@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project_system.org.EmployeeController">
+   <children>
+      <BorderPane layoutX="238.0" layoutY="168.0" prefHeight="592.0" prefWidth="931.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <VBox prefHeight="83.0" prefWidth="931.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="80.0" prefWidth="931.0">
+                     <children>
+                        <ImageView fx:id="profile" fitHeight="41.0" fitWidth="41.0" layoutX="30.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Pictures/AVATAR.jpg" />
+                           </image>
+                        </ImageView>
+                        <Separator layoutX="203.0" layoutY="-10.0" orientation="VERTICAL" prefHeight="100.0" prefWidth="3.0" />
+                        <Label fx:id="text_greet1" layoutX="223.0" layoutY="9.0" prefHeight="41.0" prefWidth="206.0" text="Good morning, Luese">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="text_date" layoutX="225.0" layoutY="42.0" prefHeight="18.0" prefWidth="190.0" text="it's Monday, 28,2024">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="text_time" layoutX="225.0" layoutY="61.0" prefHeight="25.0" prefWidth="139.0" text="05:29 pm">
+                           <font>
+                              <Font name="System Bold" size="19.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="text_name" layoutX="29.0" layoutY="54.0" prefHeight="18.0" prefWidth="164.0" text="Luese Andrey T. Rivas">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="text_department" layoutX="29.0" layoutY="71.0" prefHeight="18.0" prefWidth="126.0" text="Employee" />
+                        <Label layoutX="568.0" layoutY="21.0" prefHeight="38.0" prefWidth="170.0" text="Operation Tuli">
+                           <font>
+                              <Font name="System Bold" size="17.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="text_date1" layoutX="484.0" layoutY="48.0" prefHeight="16.0" prefWidth="155.0" text="Adrian Lopez, Admin">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefHeight="669.0" prefWidth="206.0" style="-fx-background-color: #21416b;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="482.0" prefWidth="206.0" style="-fx-border-color: #c9c9c9;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="btn_home" mnemonicParsing="false" onMouseClicked="#Clicked_Home" prefHeight="38.0" prefWidth="132.0" style="-fx-background-color: #21416b;" text="Home" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../pictures/home.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets left="40.0" top="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_Calendar" mnemonicParsing="false" onMouseClicked="#Clicked_Calendar" prefHeight="38.0" prefWidth="131.0" style="-fx-background-color: #21416b;" text="Calendar" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="23.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../pictures/calendar.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets left="40.0" top="17.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_performance" mnemonicParsing="false" onMouseClicked="#Clicked_Performance" prefHeight="38.0" prefWidth="132.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="22.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" x="1.0" y="1.0">
+                                 <image>
+                                    <Image url="@../pictures/rise.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets left="40.0" top="17.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_settings" mnemonicParsing="false" onMouseClicked="#Clicked_Settings" prefHeight="38.0" prefWidth="134.0" style="-fx-background-color: #21416b #21416b;" text="Settings" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../pictures/settings.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets left="40.0" top="17.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="-10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="-20.0" />
+               </padding>
+            </VBox>
+         </left>
+         <bottom>
+            <Pane prefHeight="25.0" prefWidth="931.0" BorderPane.alignment="CENTER" />
+         </bottom>
+         <right>
+            <Pane prefHeight="428.0" prefWidth="15.0" BorderPane.alignment="CENTER" />
+         </right>
+         <center>
+            <TabPane fx:id="tabALL" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab fx:id="tab_task" text="Task">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <SplitPane prefHeight="413.6" prefWidth="710.4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="TAB_PENDINGS" text="Pendings">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab fx:id="TAB_FINISHED" text="Finished ">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="TAB_MISSING" text="Missing">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

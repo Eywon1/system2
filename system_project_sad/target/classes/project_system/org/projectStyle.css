@@ -1,0 +1,39 @@
+/* projectStyle.css */
+.pane {
+    -fx-padding: 10px 0 0 0;
+    -fx-margin-top: 10px;
+    -fx-border-color: green;
+    -fx-background-color: #f0f0f0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+.text {
+    -fx-font-family: Arial;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -ms-flex-wrap: inherit;
+    -fx-background-color: #ff0000;
+    -fx-text-fill: white;
+}
+
+.Label {
+    -fx-font-family: Arial;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.save-button {
+    -fx-background-color: #1e81f2;
+    -fx-text-fill: white;
+}
+
+.cancel-button {
+    -fx-background-color: #ff0000;
+    -fx-text-fill: white;
+}
+
+

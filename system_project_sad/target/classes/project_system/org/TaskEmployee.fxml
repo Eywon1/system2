@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="931.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project_system.org.EmployeeController">
+   <children>
+      <BorderPane layoutX="238.0" layoutY="168.0" prefHeight="592.0" prefWidth="931.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <VBox prefHeight="108.0" prefWidth="931.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="118.0" prefWidth="931.0">
+                     <children>
+                        <Text fx:id="text_greet1" layoutX="223.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good morning, Luese" wrappingWidth="228.38303565979004">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="text_date" layoutX="223.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="it's Monday, 28,2024" wrappingWidth="219.58308601379395">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="text_time" layoutX="223.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10: 45 Am" wrappingWidth="219.58308601379395">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="text_name" layoutX="30.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Luese Andrey T. Rivas" wrappingWidth="139.58308601379395">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="text_department" layoutX="30.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Developer" textAlignment="CENTER" wrappingWidth="139.58308601379395">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                        <ImageView fx:id="profile" fitHeight="52.0" fitWidth="53.0" layoutX="30.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Pictures/AVATAR.jpg" />
+                           </image></ImageView>
+                        <Separator layoutX="204.0" layoutY="-27.0" orientation="VERTICAL" prefHeight="146.0" prefWidth="2.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <TableView fx:id="table_task" prefHeight="446.0" prefWidth="681.0" scaleShape="false" style="-fx-border-color: gray;" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn prefWidth="727.9999877691268" text="My Task" />
+              </columns>
+            </TableView>
+         </center>
+         <left>
+            <VBox prefHeight="442.0" prefWidth="205.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="474.0" prefWidth="206.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="btn_task" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnClickedTask" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: pink; -fx-background-radius: 5px 5px 5px 5px;" text="Task" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" top="70.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_Pendings" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnClickedPendings" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: pink; -fx-background-radius: 5px 5px 5px 5px;" text="Pending" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_missing" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnClickedmissing" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: pink; -fx-background-radius: 5px 5px 5px 5px;" text="Missing" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_finished" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnClickedFinished" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: pink; -fx-background-radius: 5px 5px 5px 5px;" text="Finished" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="btn_performance" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#btnClickedperformance" prefHeight="38.0" prefWidth="115.0" style="-fx-background-color: pink; -fx-background-radius: 5px 5px 5px 5px;" text="Performance" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Text fx:id="btn_settings" onMouseClicked="#btnClickedSettings" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="63.583086013793945">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="80.0" top="35.0" />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="-10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="-20.0" />
+               </padding>
+            </VBox>
+         </left>
+         <bottom>
+            <Pane prefHeight="25.0" prefWidth="931.0" BorderPane.alignment="CENTER" />
+         </bottom>
+         <right>
+            <Pane prefHeight="428.0" prefWidth="15.0" BorderPane.alignment="CENTER" />
+         </right>
+      </BorderPane>
+   </children>
+</AnchorPane>
