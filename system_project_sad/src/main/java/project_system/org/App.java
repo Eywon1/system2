@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
+
 
 
 /**
@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Ensure the FXML file name is correct and the file is in the correct location
-        Parent root = loadFXML("AdminDashboard");
+        Parent root = loadFXML("EmployeeDashboard");
         scene = new Scene(root, 1280, 800);
         stage.setScene(scene);
         stage.show();
