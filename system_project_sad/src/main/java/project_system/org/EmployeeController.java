@@ -6,15 +6,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.print.attribute.standard.Media;
+import javax.swing.JFrame;
 
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
+import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,10 +38,15 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.web.WebView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 
 public class EmployeeController {
 
@@ -80,6 +100,8 @@ public class EmployeeController {
 
     @FXML
     private Label text_time;
+    private File selectedFiles;
+    private File selectedFile;
 
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
@@ -87,7 +109,7 @@ public class EmployeeController {
     private final String DB_PASSWORD = "luese_192003";
 
 
-    @FXML
+    @FXML  //java fx button to display the calendar
     void Clicked_Calendar(MouseEvent event) {
 
     }
@@ -107,52 +129,131 @@ public class EmployeeController {
 
     }
 
-    public void initialize() {
+    public void initialize() { // Initialize the Employee Dashboard
         setTask();
     }
 
-        public void setTask() {
+    public void setTask() {
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(20, 20, 20, 20));
-        vbox.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         vbox.setPrefWidth(500);
         vbox.setPrefHeight(800);
         vbox.setLayoutX(20);
         vbox.setLayoutY(20);
 
-        List<Task> taskList = fetchTasks();
+        List<Task> taskList = fetchTasks(); // Fetch tasks from database
 
         for (Task task : taskList) {
             VBox taskBox = new VBox();
             taskBox.setSpacing(15);
             taskBox.setPadding(new Insets(10, 10, 10, 10));
             taskBox.setStyle("-fx-background-color: white");
-            taskBox.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            taskBox.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
 
             Label titleLabel = new Label(task.getTitle());
             titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
-            Label dateLabel = new Label(task.getDatePosted() + (task.getDatePosted() != null ? "-(" + task.getAssigndTo() + ")" : ""));
+            Label dateLabel = new Label(task.getDatePosted() + (task.getDatePosted() != null ? "- (" + task.getAssigndTo() + ")" : ""));
             dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
             dateLabel.setTextFill(Color.GRAY);
 
             taskBox.getChildren().addAll(titleLabel, dateLabel);
+  
 
-            taskBox.setOnMouseClicked(e -> {            //Action button for task
-                System.out.println("Task clicked");
-            });
+    titleLabel.setOnMouseClicked(e -> {  // Display task details when title is clicked
+    List<Map<String, Object>> taskInfo = fetchtaskInfoTask();
+    for (Map<String, Object> taskData : taskInfo) {
+        if (taskData.get("Title").equals(task.getTitle())) {
+            // Remove existing task detail nodes if they exist
+            tabtask.getChildren().removeIf(node -> node.getId() != null && node.getId().startsWith("taskDetail"));
+            
 
-            vbox.getChildren().add(taskBox);
+            VBox taskDetailsBox = new VBox(20); // 10 is the spacing between elements
+            taskDetailsBox.setLayoutX(560);
+            taskDetailsBox.setLayoutY(40);
+            taskDetailsBox.setId("taskDetailBox");
+
+            Label title = new Label("" + taskData.get("Title"));
+            title.setFont(Font.font("Garet", FontWeight.BOLD, 20));
+            title.setId("taskDetailTitle");
+          
+
+            Label due = new Label("Due: " + taskData.get("Due"));
+            due.setFont(Font.font("Garet", FontWeight.BOLD, 14));
+            due.setId("taskDetailDue");
+
+            Label instruction = new Label("" + taskData.get("Instruction"));
+            instruction.setFont(Font.font("Garet", FontWeight.NORMAL, 15));
+            instruction.setId("taskDetailInstruction");
+            
+
+            Label fileType = new Label("File Type: " + taskData.get("File"));
+            fileType.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+            fileType.setId("taskDetailFileType");
+
+
+            Button Submit = new Button("Add or Create");
+            Submit.setFont(Font.font("Garet", FontWeight.BOLD, 14));
+            Submit.setId("taskDetailSubmit");
+            Submit.setLayoutX(600);
+
+
+            Button MarkAsDone = new Button("Mark as Done");
+            MarkAsDone.setFont(Font.font("Garet", FontWeight.BOLD, 14));
+            MarkAsDone.setId("taskDetailMarkAsDone");
+            MarkAsDone.setLayoutX(600);
+
+            Submit.setOnAction(event -> {
+                String insertquery = "INSERT INTO taskdb (Title, Instruction, `For`, AssignedTo, Due, File, FileType, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                     PreparedStatement stmt = conn.prepareStatement(insertquery)) {
+                    stmt.setString(1, title.getText());
+                    stmt.setString(2, instruction.getText());
+                    stmt.setString(3, "For");
+                    stmt.setString(4, "AssignedTo");
+                    stmt.setString(5, due.getText());
+                    stmt.setBytes(6, (byte[]) taskData.get("File"));
+                    stmt.setString(7, fileType.getText());
+                    stmt.setString(8, "Pending");
+                    stmt.executeUpdate();
+                } catch (SQLException ex) {
+                }
+             });
+                
+                            taskDetailsBox.getChildren().addAll(title, due, instruction, fileType, Submit, MarkAsDone);
+                            tabtask.getChildren().add(taskDetailsBox);
+
+                        }
+                    }
+                }); 
+                
+                        vbox.getChildren().add(taskBox);
+            }
+                
+                        ScrollPane scrollPane = new ScrollPane(vbox);
+                        tabtask.getChildren().add(scrollPane);
         }
 
-        ScrollPane scrollPane = new ScrollPane(vbox);
-        tabtask.getChildren().add(scrollPane);
+        /*private void AttachFile(byte[] bs, String string) {
+            File file = new FileChooser().showOpenDialog(new JFrame());   
+            if (file != null) {
+                // Read file content
+                byte[] fileContent = new byte[(int) file.length()];
+                try (FileInputStream fis = new FileInputStream(file)) {
+                    fis.read(fileContent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // Display file
+                displayFile(fileContent, string);
+            }         
 
-    }
-
-    private List<Task> fetchTasks() {
+                        
+        }*/
+                
+        private List<Task> fetchTasks() {  //method to fetch task from database
         String query = "SELECT Title, Due, AssignedTo FROM taskdb";
         List<Task> taskList = new ArrayList<>();
 
@@ -197,47 +298,167 @@ public class EmployeeController {
         }
     }
 
-    public void fetchtaskInfoTask(){
-        String query = "SELECT Title, Instruction, For,  AssignedTo, Due, File, FileType, Status FROM taskdb";
-        List<String> TaskList = new ArrayList<>();
+       public List<Map<String, Object>> fetchtaskInfoTask() {
+        String query = "SELECT Title, Instruction, `For`, AssignedTo, Due, File, FileType, Status FROM taskdb";
+        List<Map<String, Object>> taskList = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                TaskList.add(rs.getString("Title"));
-                TaskList.add(rs.getString("Instruction"));
-                TaskList.add(rs.getString("For"));
-                TaskList.add(rs.getString("AssignedTo"));
-                TaskList.add(rs.getString("Due"));
-                TaskList.add(rs.getString("File"));
-                TaskList.add(rs.getString("FileType"));
-                TaskList.add(rs.getString("Status"));
-
-                
-                
+                Map<String, Object> taskData = new HashMap<>();
+                taskData.put("Title", rs.getString("Title"));
+                taskData.put("Instruction", rs.getString("Instruction"));
+                taskData.put("For", rs.getString("For"));
+                taskData.put("AssignedTo", rs.getString("AssignedTo"));
+                taskData.put("Due", rs.getString("Due"));
+                taskData.put("File", rs.getBytes("File")); // Retrieve file as byte array
+                taskData.put("FileType", rs.getString("FileType"));
+                taskData.put("Status", rs.getString("Status"));
+                taskList.add(taskData);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return taskList;
+    }
 
+    public void selectDoneFile(){
+         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+        selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (selectedFile != null) {
+            //label_PDF1.setText(selectedFile.getAbsolutePath());
+        }
+    } 
+                    
+ }
+            
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    /*public void displayFile(byte[] file, String fileType) {
+       
+    tabtask.getChildren().removeIf(node -> node.getId() != null && node.getId().startsWith("fileDisplay"));
+
+    Node fileDisplayNode = null;
+
+    switch (fileType.toLowerCase()) {
+        case "image/png":
+        case "image/jpeg":
+        case "image/gif":
+            // Display image
+            Image image = new Image(new ByteArrayInputStream(file));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(400); // Set desired width
+            imageView.setPreserveRatio(true);
+            imageView.setId("fileDisplayImage");
+            fileDisplayNode = imageView;
+            break;
+        case "application/pdf":
+            // Display PDF
+            WebView webView = new WebView();
+            webView.getEngine().loadContent(new String(file), "application/pdf");
+            webView.setPrefSize(600, 800); // Set desired size
+            webView.setId("fileDisplayPDF");
+            fileDisplayNode = webView;
+            break; 
+              case "text/plain":
+            // Display text
+            TextArea textArea = new TextArea(new String(file));
+            textArea.setEditable(false);
+            textArea.setPrefSize(600, 400); // Set desired size
+            textArea.setId("fileDisplayText");
+            fileDisplayNode = textArea;
+            break;
+        default:
+            // Handle unsupported file types
+            TextArea unsupportedText = new TextArea("Unsupported file type: " + fileType);
+            unsupportedText.setEditable(false);
+            unsupportedText.setPrefSize(600, 100); // Set desired size
+            unsupportedText.setId("fileDisplayUnsupported");
+            fileDisplayNode = unsupportedText;
+            break;    
     }
-    }
-}
+
+      if (fileDisplayNode != null) {
+        VBox fileDisplayBox = new VBox(10);
+        fileDisplayBox.setLayoutX(560);
+        fileDisplayBox.setLayoutY(300); // Adjust as needed
+        fileDisplayBox.setId("fileDisplayBox");
+        fileDisplayBox.getChildren().add(fileDisplayNode);
+        tabtask.getChildren().add(fileDisplayBox);
+    }    
+}/*
+
+
+<dependency>
+
+    <groupId>org.openjfx</groupId>
+
+    <artifactId>javafx-controls</artifactId>
+
+    <version>17.0.2</version>
+
+</dependency>
+
+<dependency>
+
+    <groupId>org.openjfx</groupId>
+
+    <artifactId>javafx-web</artifactId>
+
+    <version>17.0.2</version>
+
+</dependency>
+ */
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -290,15 +511,14 @@ public class EmployeeController {
     
     }
     
-}*/
-
-
-
-    
+}*/ 
 
 
 
 
-    
- 
-    
+
+
+
+
+
+
