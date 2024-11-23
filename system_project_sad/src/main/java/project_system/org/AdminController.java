@@ -3,15 +3,14 @@ package project_system.org;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.JFrame;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Separator;
-import javax.swing.JTextField;
-
-
-
 import javafx.scene.control.TextField;
-
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -25,30 +24,33 @@ import java.sql.Time;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class AdminController {
+
+    @FXML
+    private TableView<Task> TB_Table;
 
     @FXML
     private Label Adminname;
@@ -83,6 +85,22 @@ public class AdminController {
     @FXML
     private Label timegreet;
 
+     @FXML
+    private ComboBox<String> C_BOX;
+
+    @FXML
+    private ProgressIndicator TF_FinishedTask;
+
+    @FXML
+    private ProgressIndicator TM_Missing;
+
+    @FXML
+    private ProgressIndicator TP_Pendings;
+
+    @FXML
+    private VBox vb_Table;
+  
+
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER ="root";
     private final String DB_PASSWORD = "luese_192003";
@@ -92,7 +110,11 @@ public class AdminController {
 
         // Apply the CSS file to the TabPane
         TabPROJECT.getStylesheets().add(css);
-      
+
+
+        populateProjects();
+    
+    
              
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy");
@@ -118,6 +140,11 @@ public class AdminController {
 
        BTN_CREATEPROJECT.setOnMouseClicked(this::clickedCreateProject);
        updateProjectTab();
+
+         C_BOX.setOnAction(e -> {
+          loadTasksForSelectedProject();
+        });
+
     }
 
     @FXML
@@ -230,22 +257,24 @@ public class AdminController {
             projectPane.setPrefSize(200, 150);
             projectPane.setStyle("-fx-border-color: black; -fx-background-color: #f0f0f0; -fx-border-radius: 10;");
 
+            VBox contentBox = new VBox();
+            contentBox.setSpacing(10);
+            contentBox.setLayoutX(10);
+            contentBox.setLayoutY(10);
+
             Text projectNameText = new Text(projectName);
             projectNameText.setFont(Font.font("Arial", 20));
             projectNameText.setStyle("-fx-font-weight: bold");
-            projectNameText.setLayoutX(10);
-            projectNameText.setLayoutY(30);
             projectNameText.setWrappingWidth(180);
 
             Button deleteButton = new Button("Delete");
-            deleteButton.setLayoutX(10);
-            deleteButton.setLayoutY(100);
             deleteButton.setOnAction(e -> {
                 deleteProject(projectName);
                 updateProjectTab(); // Re-arrange projects after deletion
             });
 
-            projectPane.getChildren().addAll(projectNameText, deleteButton);
+            contentBox.getChildren().addAll(projectNameText, deleteButton);
+            projectPane.getChildren().add(contentBox);
 
             double layoutX = column * (200 + columnMargin) + leftMargin;
             double layoutY = row * (150 + rowMargin) + topMargin;
@@ -261,7 +290,7 @@ public class AdminController {
                 row++;
             }
         }
-    } catch (Exception e) {
+    } catch (SQLException e) {
         e.printStackTrace();
     }
 
@@ -278,8 +307,8 @@ public class AdminController {
     TabPROJECT.getChildren().add(text);
     TabPROJECT.getChildren().addAll(separator);
 }
-
-private void deleteProject(String projectName) {
+ 
+private void deleteProject(String projectName) {           //delete project
     String query = "DELETE FROM projectname WHERE ProjectTittle = ?";
     try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
          PreparedStatement statement = connection.prepareStatement(query)) {
@@ -289,24 +318,128 @@ private void deleteProject(String projectName) {
         e.printStackTrace();
     }
 }
+
+public void populateProjects() {                                      //populate the combobox with project names
+    String query = "SELECT ProjectTittle FROM projectname";
+    try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+         PreparedStatement statement = connection.prepareStatement(query);
+         ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+            String projectName = resultSet.getString("ProjectTittle");
+            C_BOX.getItems().add(projectName);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
 }
 
+public void loadTasksForSelectedProject() {
+    
+    String selectedProject = C_BOX.getSelectionModel().getSelectedItem();
+        System.out.println("Loading tasks for project: " + selectedProject);
+        if (selectedProject != null) {
+            String query = "SELECT Title, Instruction, Due, Status, AssignedTo FROM taskdb WHERE `For` = ?";
+            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                if (connection != null && statement != null) {
+                    statement.setString(1, selectedProject);
+                    ResultSet resultSet = statement.executeQuery();
+
+                    ObservableList<Task> tasks = FXCollections.observableArrayList();
+                    vb_Table.getChildren().clear(); // Clear previous tasks
+
+                    while (resultSet.next()) {
+                        String title = resultSet.getString("Title");
+                        String instruction = resultSet.getString("Instruction");
+                        String due = resultSet.getString("Due");
+                        String status = resultSet.getString("Status");
+                        String assignedTo = resultSet.getString("AssignedTo");
+                        Task task = new Task(title, instruction, due, status, assignedTo);
+                        tasks.add(task);
+
+                        VBox vbox = new VBox();
+                        vbox.setSpacing(10);
+                        vbox.setPadding(new Insets(20, 20, 20, 20));
+                        vbox.setPrefWidth(500);
+                        vbox.setPrefHeight(800);
+                        vbox.setLayoutX(20);
+                        vbox.setLayoutY(20);
+                       
+                        
+                        // Create a VBox for task details
+                        VBox taskDetails = new VBox();
+                        taskDetails.setSpacing(5);
+                        taskDetails.setPadding(new Insets(10)); // Add padding to position text inside the rectangle
+                        taskDetails.setAlignment(Pos.CENTER_LEFT); // Align text to the left
+                        taskDetails.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #d3d3d3; -fx-border-radius: 5;");
+                        taskDetails.setLayoutX(10);
+                        taskDetails.setPrefWidth(300);
+                        taskDetails.getChildren().addAll(
+                            new Text("Title: " + task.getName()),
+                            new Text("Instruction: " + task.getInstruction()),
+                            new Text("Due Date: " + task.getDueDate()),
+                            new Text("Assigned To: " + task.getAssignedTo()),
+                            new Text("Status: " + task.getStatus())
+                        );
+
+                        // Create a StackPane to hold the rectangle and text
+                        StackPane stackPane = new StackPane();
+                        stackPane.getChildren().addAll(taskDetails);
+
+                        // Add the stackPane to the vb_Table
+                        vb_Table.getChildren().add(stackPane);
+                       
+                    }
+                    System.out.println("Tasks loaded successfully.");
+                }
+            } catch (SQLException e) {
+                System.err.println("Error loading tasks: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No project selected.");
+        }
+    }
+    
+
+    class Task {
+        private String title;
+        private String instruction;
+        private String dueDate;
+        private String status;
+        private String assignedTo;
+
+        public Task(String title, String instruction, String dueDate, String status, String assignedTo) {
+            this.title = title;
+            this.instruction = instruction;
+            this.dueDate = dueDate;
+            this.status = status;
+            this.assignedTo = assignedTo;
+        }
+
+        public String getName() {
+            return title;
+        }
+
+        public String getInstruction() {
+            return instruction;
+        }
+
+        public String getDueDate() {
+            return dueDate;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public String getAssignedTo() {
+            return assignedTo;
+        }
+    }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 

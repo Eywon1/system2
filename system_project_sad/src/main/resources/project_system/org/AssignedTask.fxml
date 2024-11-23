@@ -27,7 +27,7 @@
                <children>
                   <VBox layoutX="63.0" layoutY="66.0" prefHeight="492.0" prefWidth="164.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="btnHOME" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Home" textFill="WHITE">
+                        <Button fx:id="btnHOME" graphicTextGap="35.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Dashboard" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -42,7 +42,7 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnCREATETASK" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#btnCREATETASK" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Create" textFill="WHITE">
+                        <Button fx:id="btnCREATETASK" graphicTextGap="23.0" mnemonicParsing="false" onMouseClicked="#btnCREATETASK" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Assigned Task" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -57,7 +57,7 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPRINT" graphicTextGap="9.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
+                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="25.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -72,7 +72,7 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
+                        <Button fx:id="btnPrint" graphicTextGap="69.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

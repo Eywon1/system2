@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Ensure the FXML file name is correct and the file is in the correct location
-        Parent root = loadFXML("Login");
+        Parent root = loadFXML("AdminDashboard");
         scene = new Scene(root, 1280, 800);
         stage.setScene(scene);
         stage.show();

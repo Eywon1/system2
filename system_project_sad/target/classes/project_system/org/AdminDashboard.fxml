@@ -12,7 +12,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -24,7 +27,7 @@
                <children>
                   <VBox layoutX="4.0" layoutY="25.6" prefHeight="450.0" prefWidth="163.0" style="-fx-background-color: #21416b;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                      <children>
-                        <Button fx:id="btnHOME" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Dashboard" textFill="WHITE">
+                        <Button fx:id="btnHOME" graphicTextGap="30.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Dashboard" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -54,7 +57,7 @@
                               <Insets left="5.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="10.0" layoutX="10.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
+                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="20.0" layoutX="10.0" layoutY="95.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -69,7 +72,7 @@
                               <Insets left="5.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPRINT" graphicTextGap="9.0" layoutX="10.0" layoutY="52.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
+                        <Button fx:id="btnPRINT" graphicTextGap="65.0" layoutX="10.0" layoutY="52.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -90,7 +93,7 @@
             </AnchorPane>
          </left>
          <top>
-            <AnchorPane prefHeight="92.0" prefWidth="896.0" style="-fx-background-color: #5783bc;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="85.0" prefWidth="1280.0" style="-fx-background-color: #5783bc;" BorderPane.alignment="CENTER">
                <children>
                   <VBox layoutX="171.0" layoutY="1.0" prefHeight="106.0" prefWidth="267.0">
                      <children>
@@ -107,7 +110,8 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Label>
-                           </children></AnchorPane>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </VBox>
                   <VBox layoutX="146.0" layoutY="-72.0" prefHeight="95.0" prefWidth="176.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="719.0" AnchorPane.topAnchor="0.0">
@@ -135,18 +139,22 @@
                         </Label>
                      </children>
                   </VBox>
-                  <Button fx:id="BTN_CREATEPROJECT" layoutX="1134.0" layoutY="54.0" mnemonicParsing="false" onMouseClicked="#clickedCreateProject" prefHeight="34.0" prefWidth="123.0" style="-fx-background-color: #21416b; -fx-background-radius: 24PX;" text="  PROJECT" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../pictures/add-button.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
+                  <AnchorPane layoutX="1131.0" layoutY="35.0">
+                     <children>
+                        <Button fx:id="BTN_CREATEPROJECT" layoutX="4.0999755859375" layoutY="3.0999984741210938" mnemonicParsing="false" onMouseClicked="#clickedCreateProject" prefHeight="34.0" prefWidth="123.0" style="-fx-background-color: #21416b; -fx-background-radius: 24PX;" text="  PROJECT" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../pictures/add-button.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </top>
@@ -165,26 +173,52 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ComboBox layoutX="307.0" layoutY="35.0" prefHeight="30.0" prefWidth="219.0" />
+                              <ComboBox fx:id="C_BOX" layoutX="318.0" layoutY="10.0" prefHeight="32.0" prefWidth="210.0" />
                               <Separator layoutX="540.0" orientation="VERTICAL" prefHeight="450.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="540.0" AnchorPane.topAnchor="0.0" />
-                              <Label layoutX="569.0" layoutY="28.0" prefHeight="25.0" prefWidth="97.0" text="FINISHED TASK">
+                              <Label layoutX="576.0" layoutY="16.0" prefHeight="25.0" prefWidth="97.0" text="FINISHED TASK">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="737.0" layoutY="31.0" prefHeight="18.0" prefWidth="79.0" text="PENDINGS">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="768.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="PENDINGS">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <ProgressIndicator fx:id="PENDINGS_indicator" layoutX="706.0" layoutY="62.0" prefHeight="114.0" prefWidth="143.0" progress="0.91" AnchorPane.bottomAnchor="457.0" AnchorPane.leftAnchor="706.0" AnchorPane.rightAnchor="263.0" AnchorPane.topAnchor="62.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="889.0" layoutY="31.0" prefHeight="18.0" prefWidth="79.0" text="MISSING">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="951.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="MISSING">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <ProgressIndicator fx:id="MISSING_indicator" layoutX="857.0" layoutY="61.0" prefHeight="118.0" prefWidth="143.0" progress="0.91" AnchorPane.bottomAnchor="455.0" AnchorPane.leftAnchor="857.0" AnchorPane.rightAnchor="112.59999999999991" AnchorPane.topAnchor="61.0" />
-                              <ProgressIndicator fx:id="Finished_Indicator" layoutX="546.0" layoutY="60.0" prefHeight="119.0" prefWidth="142.0" progress="0.43" AnchorPane.bottomAnchor="455.19999999999993" AnchorPane.leftAnchor="546.0" AnchorPane.rightAnchor="423.5999999999999" AnchorPane.topAnchor="60.0" />
+                              <Separator layoutX="-8.0" layoutY="51.0" prefHeight="3.0" prefWidth="1102.0" AnchorPane.leftAnchor="-8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="51.0" />
+                              <GridPane layoutX="541.0" layoutY="75.0" prefHeight="135.0" prefWidth="565.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="488.0" minWidth="10.0" prefWidth="176.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="488.0" minWidth="10.0" prefWidth="199.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="201.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="132.0" minHeight="10.0" prefHeight="132.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <ProgressIndicator fx:id="TF_FinishedTask" layoutX="12.0" layoutY="6.0" prefHeight="118.0" prefWidth="144.0" progress="0.8" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="6.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                       <children>
+                                          <ProgressIndicator fx:id="TP_Pendings" layoutX="14.0" layoutY="6.0" prefHeight="118.0" prefWidth="144.0" progress="0.69" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="6.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                       <children>
+                                          <ProgressIndicator fx:id="TM_Missing" layoutX="3.0" layoutY="6.0" prefHeight="118.0" prefWidth="144.0" progress="0.06" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="6.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </GridPane>
+                              <VBox fx:id="vb_Table" layoutX="14.0" layoutY="74.0" prefHeight="563.0" prefWidth="508.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="580.0" AnchorPane.topAnchor="74.0" />
                            </children>
                         </AnchorPane>
                   </content>
