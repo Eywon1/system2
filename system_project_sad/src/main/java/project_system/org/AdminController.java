@@ -39,6 +39,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -104,6 +105,8 @@ public class AdminController {
     @FXML
     private VBox vb_Table;
   
+    @FXML
+    private ScrollPane scrollPane; // Add this line
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER ="root";
@@ -148,7 +151,12 @@ public class AdminController {
 
          C_BOX.setOnAction(e -> {
           loadTasksForSelectedProject();
-        });
+        }); 
+
+        scrollPane.setContent(vb_Table); // Add this line to set vb_Table as the content of scrollPane
+        scrollPane.setFitToWidth(true); // Ensure the scroll pane fits the width of the content
+        scrollPane.setPrefHeight(563); // Set preferred height for the scroll pane
+        scrollPane.setPrefWidth(519); // Set preferred width for the scroll pane
 
     }
 
@@ -518,15 +526,15 @@ private Button createCancelButton(Stage stage) {
 
 private VBox createTaskDetailsVBox(Task task) {
     VBox taskDetails = new VBox();
-    taskDetails.setSpacing(5);
+    taskDetails.setSpacing(10);
     taskDetails.setPadding(new Insets(10)); // Add padding to position text inside the rectangle
     taskDetails.setAlignment(Pos.CENTER_LEFT); // Align text to the left
     taskDetails.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #d3d3d3; -fx-border-radius: 5;");
     taskDetails.setLayoutX(10);
-    taskDetails.setPrefWidth(300);
+    taskDetails.setPrefWidth(495);
 
-    Text titleText = new Text("Title: " + task.getName());
-    Text instructionText = new Text("Instruction: " + task.getInstruction());
+    Text titleText = new Text(" " + task.getName());
+    Text instructionText = new Text("" + task.getInstruction());
     Text dueDateText = new Text("Due Date: " + task.getDueDate());
     Text assignedToText = new Text("Assigned To: " + task.getAssignedTo());
     Text statusText = new Text("Status: " + task.getStatus());
@@ -547,7 +555,7 @@ private VBox createTaskDetailsVBox(Task task) {
         statusText
     );
 
-    return taskDetails;
+    return taskDetails; 
 }
 
 private void showAlert(String title) {

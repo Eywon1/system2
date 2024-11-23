@@ -27,11 +27,11 @@
                <children>
                   <VBox layoutX="63.0" layoutY="66.0" prefHeight="492.0" prefWidth="176.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="btnHOME" graphicTextGap="35.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Dashboard" textFill="WHITE">
+                        <Button fx:id="btnHOME" graphicTextGap="40.0" mnemonicParsing="false" onMouseClicked="#btnHOME" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Dashboard" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/layout.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -42,11 +42,11 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnCREATETASK" graphicTextGap="23.0" mnemonicParsing="false" onMouseClicked="#btnCREATETASK" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Assigned Task" textFill="WHITE">
+                        <Button fx:id="btnCREATETASK" graphicTextGap="20.0" mnemonicParsing="false" onMouseClicked="#btnCREATETASK" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Assigned Task" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/assign.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -57,11 +57,11 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="25.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
+                        <Button fx:id="btnPERFORAMNCE" graphicTextGap="30.0" mnemonicParsing="false" onMouseClicked="#btnPERFORAMANCE" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Performance" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/efficiency.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -72,11 +72,11 @@
                               <Insets left="15.0" top="15.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnPrint" graphicTextGap="69.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
+                        <Button fx:id="btnPrint" graphicTextGap="73.0" mnemonicParsing="false" onMouseClicked="#btnPRINT" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #21416b;" text="Print" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/printer.png" />
                                  </image>
                               </ImageView>
                            </graphic>

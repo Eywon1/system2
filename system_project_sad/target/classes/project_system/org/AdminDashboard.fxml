@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -31,7 +32,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/layout.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -46,7 +47,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/assign.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -61,7 +62,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/efficiency.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -76,7 +77,7 @@
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../pictures/home.png" />
+                                    <Image url="@../pictures/printer.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -175,17 +176,17 @@
                            <children>
                               <ComboBox fx:id="C_BOX" layoutX="318.0" layoutY="10.0" prefHeight="32.0" prefWidth="210.0" promptText="Select Project" />
                               <Separator layoutX="540.0" orientation="VERTICAL" prefHeight="450.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="540.0" AnchorPane.topAnchor="0.0" />
-                              <Label layoutX="576.0" layoutY="16.0" prefHeight="25.0" prefWidth="97.0" text="FINISHED TASK">
+                              <Label layoutX="576.0" layoutY="16.0" prefHeight="25.0" prefWidth="97.0" text="FINISHED TASK" textFill="#41dd16">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="768.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="PENDINGS">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="768.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="PENDINGS" textFill="#ffb71b">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="951.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="MISSING">
+                              <Label alignment="CENTER" contentDisplay="CENTER" layoutX="951.0" layoutY="19.0" prefHeight="18.0" prefWidth="79.0" text="MISSING" textFill="#e83939">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -222,11 +223,9 @@
                                  <children>
                                     <AnchorPane prefHeight="613.0" prefWidth="492.0">
                                        <children>
-                                          <VBox layoutX="8.0" layoutY="4.0">
-                                             <children>
-                                                <VBox fx:id="vb_Table" prefHeight="561.0" prefWidth="503.0" />
-                                             </children>
-                                          </VBox>
+                                          <ScrollPane fx:id="scrollPane" layoutX="8.0" layoutY="4.0" prefHeight="563.0" prefWidth="519.0">
+                                             <VBox fx:id="vb_Table" />
+                                          </ScrollPane>
                                        </children>
                                     </AnchorPane>
                                  </children>
