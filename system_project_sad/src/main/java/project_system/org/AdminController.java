@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
@@ -32,12 +33,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -113,6 +117,7 @@ public class AdminController {
 
 
         populateProjects();
+        loadTasksForSelectedProject();
     
     
              
@@ -334,73 +339,226 @@ public void populateProjects() {                                      //populate
 }
 
 public void loadTasksForSelectedProject() {
-    
     String selectedProject = C_BOX.getSelectionModel().getSelectedItem();
-        System.out.println("Loading tasks for project: " + selectedProject);
-        if (selectedProject != null) {
-            String query = "SELECT Title, Instruction, Due, Status, AssignedTo FROM taskdb WHERE `For` = ?";
-            try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement statement = connection.prepareStatement(query)) {
-                if (connection != null && statement != null) {
-                    statement.setString(1, selectedProject);
-                    ResultSet resultSet = statement.executeQuery();
+    System.out.println("Loading tasks for project: ");
 
-                    ObservableList<Task> tasks = FXCollections.observableArrayList();
-                    vb_Table.getChildren().clear(); // Clear previous tasks
+    if (selectedProject != null) {
+        String query = "SELECT Title, Instruction, Due, Status, AssignedTo FROM taskdb WHERE `For` = ?";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-                    while (resultSet.next()) {
-                        String title = resultSet.getString("Title");
-                        String instruction = resultSet.getString("Instruction");
-                        String due = resultSet.getString("Due");
-                        String status = resultSet.getString("Status");
-                        String assignedTo = resultSet.getString("AssignedTo");
-                        Task task = new Task(title, instruction, due, status, assignedTo);
-                        tasks.add(task);
+            statement.setString(1, selectedProject);
+            ResultSet resultSet = statement.executeQuery();
 
-                        VBox vbox = new VBox();
-                        vbox.setSpacing(10);
-                        vbox.setPadding(new Insets(20, 20, 20, 20));
-                        vbox.setPrefWidth(500);
-                        vbox.setPrefHeight(800);
-                        vbox.setLayoutX(20);
-                        vbox.setLayoutY(20);
-                       
-                        
-                        // Create a VBox for task details
-                        VBox taskDetails = new VBox();
-                        taskDetails.setSpacing(5);
-                        taskDetails.setPadding(new Insets(10)); // Add padding to position text inside the rectangle
-                        taskDetails.setAlignment(Pos.CENTER_LEFT); // Align text to the left
-                        taskDetails.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #d3d3d3; -fx-border-radius: 5;");
-                        taskDetails.setLayoutX(10);
-                        taskDetails.setPrefWidth(300);
-                        taskDetails.getChildren().addAll(
-                            new Text("Title: " + task.getName()),
-                            new Text("Instruction: " + task.getInstruction()),
-                            new Text("Due Date: " + task.getDueDate()),
-                            new Text("Assigned To: " + task.getAssignedTo()),
-                            new Text("Status: " + task.getStatus())
-                        );
+            ObservableList<Task> tasks = FXCollections.observableArrayList();
+            vb_Table.getChildren().clear(); // Clear previous tasks
 
-                        // Create a StackPane to hold the rectangle and text
-                        StackPane stackPane = new StackPane();
-                        stackPane.getChildren().addAll(taskDetails);
+            while (resultSet.next()) {
+                String title = resultSet.getString("Title");
+                String instruction = resultSet.getString("Instruction");
+                String due = resultSet.getString("Due");
+                String status = resultSet.getString("Status");
+                String assignedTo = resultSet.getString("AssignedTo");
+                Task task = new Task(title, instruction, due, status, assignedTo);
+                tasks.add(task);
 
-                        // Add the stackPane to the vb_Table
-                        vb_Table.getChildren().add(stackPane);
-                       
-                    }
-                    System.out.println("Tasks loaded successfully.");
-                }
-            } catch (SQLException e) {
-                System.err.println("Error loading tasks: " + e.getMessage());
+                Button deleteButton = createDeleteButton(title);
+                Button editButton = createEditButton(title, instruction, due, assignedTo);
+
+                VBox taskDetails = createTaskDetailsVBox(task);
+
+                HBox buttonBox = new HBox(10); // 10 is the spacing between buttons
+                buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
+                buttonBox.getChildren().addAll(deleteButton, editButton);
+
+                VBox taskBox = new VBox();
+                taskBox.getChildren().addAll(taskDetails, buttonBox);
+                taskBox.setSpacing(10);
+
+                StackPane stackPane = new StackPane();
+                stackPane.getChildren().add(taskBox);
+                StackPane.setAlignment(buttonBox, Pos.BOTTOM_RIGHT);
+
+                vb_Table.getChildren().add(stackPane);
             }
-        } else {
-            System.out.println("No project selected.");
+            System.out.println("Tasks loaded successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error loading tasks: " + e.getMessage());
         }
+    } else {
+        System.out.println("No project selected.");
     }
-    
+}
 
+private Button createDeleteButton(String title) {
+    Button deleteButton = new Button("Delete");
+    deleteButton.setLayoutX(200);
+    deleteButton.setLayoutY(60);
+    deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+    deleteButton.setOnAction(e -> {
+        String deleteQuery = "DELETE FROM taskdb WHERE Title = ?";
+        try (Connection deleteConnection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement deleteStatement = deleteConnection.prepareStatement(deleteQuery)) {
+            deleteStatement.setString(1, title);
+            deleteStatement.executeUpdate();
+            loadTasksForSelectedProject();
+            System.out.println("Task deleted successfully.");
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    });
+    return deleteButton;
+}
+
+private Button createEditButton(String title, String instruction, String due, String assignedTo) {
+    Button editButton = new Button("Edit");
+    editButton.setLayoutX(250);
+    editButton.setLayoutY(60);
+    editButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+    editButton.setOnAction(e -> {
+        Stage stage = new Stage();
+        stage.setTitle("Edit Task");
+
+        Pane pane = new Pane();
+        pane.setPrefSize(500, 500);
+
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.show();
+
+        TextField t1 = createTextField("Task Title", title, 100, 50, pane);
+        TextArea t2 = createTextArea("Task Instruction", instruction, 100, 110, pane);
+        TextField t3 = createTextField("Due Date", due, 100, 325, pane);
+        TextField t4 = createTextField("Assigned To", assignedTo, 100, 380, pane);
+
+        Button saveButton = createSaveButton(stage, title, t1, t2, t3, t4);
+        Button cancelButton = createCancelButton(stage);
+
+        pane.getChildren().addAll(saveButton, cancelButton);
+    });
+    return editButton;
+}
+
+private TextField createTextField(String labelText, String text, int x, int y, Pane pane) {
+    Label label = new Label(labelText);
+    label.setLayoutX(x);
+    label.setLayoutY(y - 30);
+    label.setStyle("-fx-font-weight: bold");
+    pane.getChildren().add(label);
+
+    TextField textField = new TextField(text);
+    textField.setLayoutX(x);
+    textField.setLayoutY(y);
+    textField.setPrefWidth(300);
+    pane.getChildren().add(textField);
+
+    return textField;
+}
+
+private TextArea createTextArea(String labelText, String text, int x, int y, Pane pane) {
+    Label label = new Label(labelText);
+    label.setLayoutX(x);
+    label.setLayoutY(y - 30);
+    label.setStyle("-fx-font-weight: bold");
+    pane.getChildren().add(label);
+
+    TextArea textArea = new TextArea(text);
+    textArea.setLayoutX(x);
+    textArea.setLayoutY(y);
+    textArea.setPrefWidth(300);
+    pane.getChildren().add(textArea);
+
+    return textArea;
+}
+
+private Button createSaveButton(Stage stage, String title, TextField t1, TextArea t2, TextField t3, TextField t4) {
+    Button saveButton = new Button("Save");
+    saveButton.getStyleClass().add("save-Button");
+    saveButton.setStyle("-fx-background-color: Blue; -fx-text-fill: White;");
+    saveButton.setLayoutX(100);
+    saveButton.setLayoutY(450);
+    saveButton.setOnAction(e2 -> {
+        String newTitle = t1.getText();
+        stage.close();
+
+        String newInstruction = t2.getText();
+        String newDue = t3.getText();
+        String newAssignedTo = t4.getText();
+
+        if (newTitle.isEmpty() || newInstruction.isEmpty() || newDue.isEmpty() || newAssignedTo.isEmpty()) {
+            System.out.println("Please fill in all fields");
+        } else {
+            String updateQuery = "UPDATE taskdb SET Title = ?, Instruction = ?, Due = ?, AssignedTo = ? WHERE Title = ?";
+            try (Connection updateConnection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement updateStatement = updateConnection.prepareStatement(updateQuery)) {
+                updateStatement.setString(1, newTitle);
+                updateStatement.setString(2, newInstruction);
+                updateStatement.setString(3, newDue);
+                updateStatement.setString(4, newAssignedTo);
+                updateStatement.setString(5, title); // Assuming 'title' is the original title of the task
+                updateStatement.executeUpdate();
+                loadTasksForSelectedProject();
+                showAlert("Task updated successfully.");
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+    });
+    return saveButton;
+}
+
+private Button createCancelButton(Stage stage) {
+    Button cancelButton = new Button("Cancel");
+    cancelButton.getStyleClass().add("cancel-Button");
+    cancelButton.setLayoutX(150);
+    cancelButton.setLayoutY(450);
+    cancelButton.setOnAction(e1 -> stage.close());
+    return cancelButton;
+}
+
+private VBox createTaskDetailsVBox(Task task) {
+    VBox taskDetails = new VBox();
+    taskDetails.setSpacing(5);
+    taskDetails.setPadding(new Insets(10)); // Add padding to position text inside the rectangle
+    taskDetails.setAlignment(Pos.CENTER_LEFT); // Align text to the left
+    taskDetails.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #d3d3d3; -fx-border-radius: 5;");
+    taskDetails.setLayoutX(10);
+    taskDetails.setPrefWidth(300);
+
+    Text titleText = new Text("Title: " + task.getName());
+    Text instructionText = new Text("Instruction: " + task.getInstruction());
+    Text dueDateText = new Text("Due Date: " + task.getDueDate());
+    Text assignedToText = new Text("Assigned To: " + task.getAssignedTo());
+    Text statusText = new Text("Status: " + task.getStatus());
+
+    Separator separator1 = new Separator();
+    separator1.setPrefWidth(280);
+
+    Separator separator2 = new Separator();
+    separator2.setPrefWidth(280);
+
+    taskDetails.getChildren().addAll(
+        titleText,
+        separator1,
+        instructionText,
+        separator2,
+        dueDateText,
+        assignedToText,
+        statusText
+    );
+
+    return taskDetails;
+}
+
+private void showAlert(String title) {
+    Alert alert = new Alert(AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(title);
+    alert.showAndWait();
+}
+
+                                        
     class Task {
         private String title;
         private String instruction;

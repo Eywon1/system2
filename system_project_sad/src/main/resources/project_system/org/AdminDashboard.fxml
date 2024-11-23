@@ -173,7 +173,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ComboBox fx:id="C_BOX" layoutX="318.0" layoutY="10.0" prefHeight="32.0" prefWidth="210.0" />
+                              <ComboBox fx:id="C_BOX" layoutX="318.0" layoutY="10.0" prefHeight="32.0" prefWidth="210.0" promptText="Select Project" />
                               <Separator layoutX="540.0" orientation="VERTICAL" prefHeight="450.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="540.0" AnchorPane.topAnchor="0.0" />
                               <Label layoutX="576.0" layoutY="16.0" prefHeight="25.0" prefWidth="97.0" text="FINISHED TASK">
                                  <font>
@@ -218,7 +218,19 @@
                                     </AnchorPane>
                                  </children>
                               </GridPane>
-                              <VBox fx:id="vb_Table" layoutX="14.0" layoutY="74.0" prefHeight="563.0" prefWidth="508.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="580.0" AnchorPane.topAnchor="74.0" />
+                              <VBox layoutX="9.0" layoutY="74.0" prefHeight="563.0" prefWidth="519.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="574.0" AnchorPane.topAnchor="74.0">
+                                 <children>
+                                    <AnchorPane prefHeight="613.0" prefWidth="492.0">
+                                       <children>
+                                          <VBox layoutX="8.0" layoutY="4.0">
+                                             <children>
+                                                <VBox fx:id="vb_Table" prefHeight="561.0" prefWidth="503.0" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
                            </children>
                         </AnchorPane>
                   </content>
