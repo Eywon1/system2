@@ -28,12 +28,10 @@ public class RegisterController {
 
     @FXML
     void btnSignUp(MouseEvent event) {
-
     }
-
     
     @FXML
     void btnBACKCLICKED(MouseEvent event) throws IOException {
-     App.setRoot("Login", 500, 600);
+    App.setRoot("Login", 500, 600);
     }
 }

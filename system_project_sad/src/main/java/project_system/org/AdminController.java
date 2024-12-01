@@ -90,7 +90,7 @@ public class AdminController {
     @FXML
     private Label timegreet;
 
-     @FXML
+    @FXML
     private ComboBox<String> C_BOX;
 
     @FXML
@@ -104,13 +104,13 @@ public class AdminController {
 
     @FXML
     private VBox vb_Table;
-  
+
     @FXML
     private ScrollPane scrollPane; // Add this line
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER ="root";
-    private final String DB_PASSWORD = "luese_192003";
+    private final String DB_PASSWORD = "eywon_1";
 
     public void initialize() {
         String css = this.getClass().getResource("/project_system/org/projectStyle.css").toExternalForm();
@@ -123,7 +123,7 @@ public class AdminController {
         loadTasksForSelectedProject();
     
     
-             
+    
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy");
         LocalDateTime now = LocalDateTime.now();
@@ -181,7 +181,6 @@ public class AdminController {
 
     }
 
-
     @FXML
     void clickedCreateProject(MouseEvent event) {
         Stage stage = new Stage();
@@ -228,7 +227,7 @@ public class AdminController {
             } else {
                 String query = "INSERT INTO projectname (ProjectTittle) VALUES (?)";
                 try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                     PreparedStatement insertStatement = connection.prepareStatement(query)) {
+                PreparedStatement insertStatement = connection.prepareStatement(query)) {
                     insertStatement.setString(1, projectName);
                     insertStatement.executeUpdate();
                     updateProjectTab();
@@ -406,7 +405,7 @@ private Button createDeleteButton(String title) {
     deleteButton.setOnAction(e -> {
         String deleteQuery = "DELETE FROM taskdb WHERE Title = ?";
         try (Connection deleteConnection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement deleteStatement = deleteConnection.prepareStatement(deleteQuery)) {
+            PreparedStatement deleteStatement = deleteConnection.prepareStatement(deleteQuery)) {
             deleteStatement.setString(1, title);
             deleteStatement.executeUpdate();
             loadTasksForSelectedProject();

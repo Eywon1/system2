@@ -2,17 +2,14 @@ package project_system.org;
 
 import java.io.IOException;
 import java.sql.Connection;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -41,7 +38,7 @@ public class LoginController {
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER = "root";
-    private final String DB_PASSWORD = "luese_192003";
+    private final String DB_PASSWORD = "eywon_1";
 
     @FXML
     void btn1(MouseEvent event) throws Exception {
@@ -110,4 +107,9 @@ public class LoginController {
      * System.out.println("tangina mo error:" + e.getMessage());
      * }
      */
+    public void logout() throws IOException {  // logout method
+        // Navigate back to the login screen
+        App.setRoot("Login", 470, 520);
+    }
 }
+

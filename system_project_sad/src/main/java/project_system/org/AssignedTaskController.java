@@ -20,7 +20,6 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -107,7 +106,7 @@ public class AssignedTaskController {
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER = "root";
-    private final String DB_PASSWORD = "luese_192003";
+    private final String DB_PASSWORD = "eywon_1";
 
     public void initialize() {
 
@@ -141,9 +140,9 @@ public class AssignedTaskController {
 
 
 
-       @FXML
+    @FXML
         void btnCREATETASK(MouseEvent event) throws SQLException {
-      
+    
     }
         
     @FXML
@@ -162,9 +161,9 @@ public class AssignedTaskController {
         } else {
             String insertquery = "INSERT INTO taskdb (Title, Instruction, AssignedTo, Due, `For`, File, FileData, FileType, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                 PreparedStatement insertStatement = connection.prepareStatement(insertquery);
-                 FileInputStream fis = new FileInputStream(selectedFile)) {
-    
+                PreparedStatement insertStatement = connection.prepareStatement(insertquery);
+                FileInputStream fis = new FileInputStream(selectedFile)) {
+                    
                 insertStatement.setString(1, title);
                 insertStatement.setString(2, instruction);
                 insertStatement.setString(3, Assignedto);
@@ -183,15 +182,15 @@ public class AssignedTaskController {
                     showAlert("Error", "An error occurred. Please try again.");
                 }
             }catch (SQLIntegrityConstraintViolationException e) {
-               showAlert("Error", "Duplicate entry. The task already exists.");
-          
+            showAlert("Error", "Duplicate entry. The task already exists.");
+        
             } catch (SQLException | IOException e) {
                 e.printStackTrace();
                 showAlert("Error", "An error occurred. Please try again.");
             }
         }
     }
-     
+    
     @FXML
     void btnHOME(MouseEvent event) throws IOException {
         App.setRoot("AdminDashboard", 1280, 800);
@@ -237,8 +236,8 @@ public class AssignedTaskController {
     public void populateDepartment() {
         String query = "SELECT ProjectTittle FROM projectname";                                      //populate department list
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
 
             ObservableList<String> departmentNames = FXCollections.observableArrayList();
             while (resultSet.next()) {
@@ -250,13 +249,13 @@ public class AssignedTaskController {
             e.printStackTrace();
         }
     }
-             
+            
     @FXML                                                           //populate employee list
     public void populateEmployee() {
         String query = "SELECT FullName FROM employeedb";
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
 
             ObservableList<String> employeeNames = FXCollections.observableArrayList();
             while (resultSet.next()) {
@@ -282,7 +281,7 @@ public class AssignedTaskController {
 
 class FileUpload {
 
-   
+
 
 
 
