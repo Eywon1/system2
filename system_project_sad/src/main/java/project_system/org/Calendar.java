@@ -37,7 +37,7 @@ public class Calendar extends JFrame {
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "eywon_1";
+    private static final String DB_PASSWORD = "AMANTE12345";
 
     public Calendar() {
         setTitle("Calendar");

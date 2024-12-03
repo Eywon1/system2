@@ -38,7 +38,7 @@ public class LoginController {
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER = "root";
-    private final String DB_PASSWORD = "eywon_1";
+    private final String DB_PASSWORD = "AMANTE12345";
 
     @FXML
     void btn1(MouseEvent event) throws Exception {

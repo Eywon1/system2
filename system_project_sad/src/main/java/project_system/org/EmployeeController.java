@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import javax.swing.SwingUtilities;
 
-import javafx.fxml.FXML; //calendar import -- - --- - -- -
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 
 public class EmployeeController {
 
-    @FXML
+    
     private Tab TAB_FINISHED;
 
     @FXML
@@ -104,7 +104,7 @@ public class EmployeeController {
 
     private final String DB_URL = "jdbc:mysql://localhost:3306/pomsdb";
     private final String DB_USER = "root";
-    private final String DB_PASSWORD = "eywon_1";
+    private final String DB_PASSWORD = "AMANTE12345";
 
 
     @FXML  //java fx button to display the calendar
@@ -146,10 +146,105 @@ private void showAlert(String title, String message) {
     alert.showAndWait();
 }
 
-    public void initialize() { // Initialize the Employee Dashboard
-        setTask();
-        
+public void initialize() {
+    setTask();
+    setFinishedTasks(); // Initialize finished tasks
+}
+
+private void setFinishedTasks() {
+    VBox vbox = new VBox();
+    vbox.setSpacing(10);
+    vbox.setPadding(new Insets(20, 20, 20, 20));
+    vbox.setPrefWidth(500);
+    vbox.setPrefHeight(800);
+    vbox.setLayoutX(20);
+    vbox.setLayoutY(20);
+
+    List<Task> finishedTaskList = fetchFinishedTasks(); // Fetch tasks from finished database
+
+    for (Task task : finishedTaskList) {
+        VBox taskBox = new VBox();
+        taskBox.setSpacing(15);
+        taskBox.setPadding(new Insets(10, 10, 10, 10));
+        taskBox.setStyle("-fx-background-color: white");
+        taskBox.setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+        Label titleLabel = new Label(task.getTitle());
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        Label dateLabel = new Label(task.getDatePosted() + (task.getDatePosted() != null ? "- (" + task.getAssigndTo() + ")" : ""));
+        dateLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 12));
+        dateLabel.setTextFill(Color.GRAY);
+
+        taskBox.getChildren().addAll(titleLabel, dateLabel);
+
+        // Make the title clickable to display task details
+        titleLabel.setOnMouseClicked(e -> {
+            List<Map<String, Object>> taskInfo = fetchtaskInfoTask();
+            for (Map<String, Object> taskData : taskInfo) {
+                if (taskData.get("Title").equals(task.getTitle())) {
+                    tabfinished.getChildren().removeIf(node -> node.getId() != null && node.getId().startsWith("taskDetail"));
+
+                    VBox taskDetailsBox = new VBox(20);
+                    taskDetailsBox.setLayoutX(560);
+                    taskDetailsBox.setLayoutY(40);
+                    taskDetailsBox.setId("taskDetailBox");
+
+                    Label title = new Label("" + taskData.get("Title"));
+                    title.setFont(Font.font("Garet", FontWeight.BOLD, 20));
+                    title.setId("taskDetailTitle");
+
+                    Label due = new Label("Due: " + taskData.get("Due"));
+                    due.setFont(Font.font("Garet", FontWeight.BOLD, 14));
+                    due.setId("taskDetailDue");
+
+                    Label instruction = new Label("" + taskData.get("Instruction"));
+                    instruction.setFont(Font.font("Garet", FontWeight.NORMAL, 15));
+                    instruction.setId("taskDetailInstruction");
+
+                    Label fileType = new Label("File Type: " + taskData.get("FileType"));
+                    fileType.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+                    fileType.setId("taskDetailFileType");
+
+
+                    taskDetailsBox.getChildren().addAll(title, due, instruction, fileType);
+                    tabfinished.getChildren().add(taskDetailsBox);
+                }
+            }
+        });
+
+        vbox.getChildren().add(taskBox);
     }
+
+    ScrollPane scrollPane = new ScrollPane(vbox);
+    tabfinished.getChildren().add(scrollPane);
+}
+
+private List<Task> fetchFinishedTasks() { // method to fetch tasks from the finished database
+    String query = "SELECT Title, Due, AssignedTo FROM finisheddb";
+    List<Task> finishedTaskList = new ArrayList<>();
+
+    try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+         PreparedStatement stmt = conn.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            String title = rs.getString("Title");
+            String datePosted = rs.getString("Due");
+            String assigned = rs.getString("AssignedTo");
+            finishedTaskList.add(new Task(title, datePosted, assigned));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return finishedTaskList;
+}
+
+
+
+        
+    
 
     public void setTask() {
         VBox vbox = new VBox();
@@ -243,37 +338,66 @@ private void showAlert(String title, String message) {
 
             MarkAsDone.setOnAction(event -> {
                 System.out.println("Mark as Done button clicked");
-                
-                // Checking if taskData is not null
+            
+                // Checking if taskData is not null and contains 'Title'
                 if (taskData == null || !taskData.containsKey("Title")) {
                     System.out.println("Task data is missing or does not contain 'Title'");
                     return;
                 }
             
+                Object titleObj = taskData.get("Title");
+                if (titleObj == null || !(titleObj instanceof String)) {
+                    System.out.println("'Title' is null or not a string");
+                    return;
+                }
+            
+                String taskTitle = titleObj.toString();
+                String taskInstruction = taskData.getOrDefault("Instruction", "No instructions provided").toString();
                 String updateQuery = "UPDATE taskdb SET Status = 'Done' WHERE Title = ?";
+                String insertQuery = "INSERT INTO finisheddb (Title, Instruction) VALUES (?, ?)";
+                String deleteQuery = "DELETE FROM taskdb WHERE Title = ?";
+            
                 try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-                    PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
-                    
+                     PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
+                     PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                     PreparedStatement deleteStmt = conn.prepareStatement(deleteQuery)) {
+            
                     // Checking if the connection is valid
                     if (conn == null || conn.isClosed()) {
                         System.out.println("Failed to connect to the database");
                         return;
                     }
-                    
-                    stmt.setString(1, taskData.get("Title").toString());
-                    int rowsAffected = stmt.executeUpdate();
-                    
+            
+                    // Update the task status
+                    updateStmt.setString(1, taskTitle);
+                    int rowsAffected = updateStmt.executeUpdate();
+            
                     if (rowsAffected > 0) {
-                        System.out.println("Task status updated to Done in database");
+                        System.out.println("Task '" + taskTitle + "' status updated to Done in database");
+            
+                        // Insert the completed task into finisheddb with an Instruction value
+                        insertStmt.setString(1, taskTitle);
+                        insertStmt.setString(2, taskInstruction);
+                        insertStmt.executeUpdate();
+                        System.out.println("Task '" + taskTitle + "' transferred to finisheddb with instruction: " + taskInstruction);
+            
+                        // Delete the task from taskdb
+                        deleteStmt.setString(1, taskTitle);
+                        deleteStmt.executeUpdate();
+                        System.out.println("Task '" + taskTitle + "' removed from taskdb");
+            
+                        // Move task between VBoxes
                         tabtask.getChildren().remove(taskBox); // Remove task from current VBox
                         tabfinished.getChildren().add(taskBox); // Add task to finished VBox
                     } else {
-                        System.out.println("No rows were updated");
+                        System.out.println("No rows were updated for task '" + taskTitle + "'");
                     }
                 } catch (SQLException ex) {
+                    System.err.println("SQL error when updating task '" + taskTitle + "': " + ex.getMessage());
                     ex.printStackTrace();
                 }
             });
+            
             
 
                             taskDetailsBox.getChildren().addAll(title, due, instruction, fileType, Submit, MarkAsDone);
